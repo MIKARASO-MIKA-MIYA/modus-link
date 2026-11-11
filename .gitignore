@@ -1,0 +1,12 @@
+node_modules/
+.next/
+.env
+.env.*
+!.env.example
+.postgres/
+.storage/
+coverage/
+*.tsbuildinfo
+src/generated/
+*.log
+.next-*/

@@ -1,0 +1,1 @@
+ALTER TABLE "Ticket" ADD CONSTRAINT "ticket_terminal_outcome_required" CHECK ("status" NOT IN ('IMPLEMENTED','REJECTED','CLOSED') OR "outcome" IS NOT NULL);

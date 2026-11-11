@@ -1,0 +1,181 @@
+generator client {
+  provider = "prisma-client"
+  output = "../src/generated/prisma"
+}
+datasource db {
+  provider = "postgresql"
+}
+enum Role {
+  EMPLOYEE
+  MANAGER
+  ADMIN
+}
+enum TicketType {
+  PROBLEM
+  SUGGESTION
+  POSITIVE_FEEDBACK
+}
+enum TicketStatus {
+  NEW
+  UNDER_REVIEW
+  NEEDS_CLARIFICATION
+  IN_PROGRESS
+  IMPLEMENTED
+  REJECTED
+  CLOSED
+}
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+}
+enum Visibility {
+  PUBLIC
+  INTERNAL
+}
+enum HistoryAction {
+  ATTACHMENT_ADDED
+  CREATED
+  UPDATED
+  ASSIGNED
+  STATUS_CHANGED
+  COMMENTED
+  CLARIFICATION_REQUESTED
+  CLARIFICATION_PROVIDED
+  ARCHIVED
+  RESTORED
+}
+model Department {
+  id String @id @default(uuid()) @db.Uuid
+  name String @unique
+  isActive Boolean @default(true)
+  users User[]
+  tickets Ticket[]
+  rules RoutingRule[]
+}
+model User {
+  id String @id @default(uuid()) @db.Uuid
+  name String
+  username String @unique
+  email String? @unique
+  passwordHash String
+  role Role @default(EMPLOYEE)
+  departmentId String @db.Uuid
+  department Department @relation(fields: [departmentId], references: [id], onDelete: Restrict)
+  isActive Boolean @default(true)
+  canViewCompanyAnalytics Boolean @default(false)
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  authoredTickets Ticket[] @relation("Author")
+  assignedTickets Ticket[] @relation("Assignee")
+  comments TicketComment[]
+  history TicketHistory[]
+  rules RoutingRule[]
+  sessions Session[]
+  @@index([departmentId, role])
+}
+model Session {
+  id String @id @default(uuid()) @db.Uuid
+  tokenHash String @unique
+  userId String @db.Uuid
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  expiresAt DateTime @db.Timestamptz(3)
+  @@index([expiresAt])
+}
+model LoginThrottle {
+  key String @id
+  attempts Int @default(0)
+  windowStart DateTime @default(now()) @db.Timestamptz(3)
+}
+model Category {
+  id String @id @default(uuid()) @db.Uuid
+  name String @unique
+  description String?
+  isActive Boolean @default(true)
+  tickets Ticket[]
+  rules RoutingRule[]
+}
+model Ticket {
+  id String @id @default(uuid()) @db.Uuid
+  sequence Int @unique @default(autoincrement())
+  number String @unique @default(dbgenerated("('MP-'::text || lpad((nextval('ticket_number_seq'::regclass))::text, 8, '0'::text))"))
+  title String
+  description String
+  type TicketType
+  categoryId String @db.Uuid
+  category Category @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  authorId String @db.Uuid
+  author User @relation("Author", fields: [authorId], references: [id], onDelete: Restrict)
+  departmentId String @db.Uuid
+  department Department @relation(fields: [departmentId], references: [id], onDelete: Restrict)
+  assigneeId String? @db.Uuid
+  assignee User? @relation("Assignee", fields: [assigneeId], references: [id], onDelete: Restrict)
+  priority Priority @default(MEDIUM)
+  status TicketStatus @default(NEW)
+  resolution String?
+  outcome TicketStatus?
+  dueAt DateTime @db.Timestamptz(3)
+  firstRespondedAt DateTime? @db.Timestamptz(3)
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @db.Timestamptz(3)
+  closedAt DateTime? @db.Timestamptz(3)
+  archivedAt DateTime? @db.Timestamptz(3)
+  version Int @default(1)
+  isSynthetic Boolean @default(false)
+  sourceAuthorRole String?
+  sourceAssigneeRole String?
+  comments TicketComment[]
+  history TicketHistory[]
+  attachments Attachment[]
+  @@index([departmentId, status, createdAt])
+  @@index([authorId, createdAt])
+  @@index([assigneeId, status])
+  @@index([dueAt, status])
+  @@index([categoryId, type, priority])
+}
+model TicketComment {
+  id String @id @default(uuid()) @db.Uuid
+  ticketId String @db.Uuid
+  ticket Ticket @relation(fields: [ticketId], references: [id], onDelete: Restrict)
+  authorId String @db.Uuid
+  author User @relation(fields: [authorId], references: [id], onDelete: Restrict)
+  content String
+  visibility Visibility @default(PUBLIC)
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  @@index([ticketId, createdAt])
+}
+model TicketHistory {
+  id String @id @default(uuid()) @db.Uuid
+  ticketId String @db.Uuid
+  ticket Ticket @relation(fields: [ticketId], references: [id], onDelete: Restrict)
+  actorId String @db.Uuid
+  actor User @relation(fields: [actorId], references: [id], onDelete: Restrict)
+  action HistoryAction
+  oldValue Json?
+  newValue Json?
+  visibility Visibility @default(PUBLIC)
+  isSynthetic Boolean @default(false)
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  @@index([ticketId, createdAt])
+}
+model RoutingRule {
+  id String @id @default(uuid()) @db.Uuid
+  categoryId String @db.Uuid
+  category Category @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  departmentId String? @db.Uuid
+  department Department? @relation(fields: [departmentId], references: [id], onDelete: Restrict)
+  assigneeId String @db.Uuid
+  assignee User @relation(fields: [assigneeId], references: [id], onDelete: Restrict)
+  isActive Boolean @default(true)
+  @@index([categoryId, departmentId, isActive])
+}
+model Attachment {
+  id String @id @default(uuid()) @db.Uuid
+  ticketId String @db.Uuid
+  ticket Ticket @relation(fields: [ticketId], references: [id], onDelete: Restrict)
+  filename String
+  storageKey String @unique
+  mimeType String
+  size Int
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+}
