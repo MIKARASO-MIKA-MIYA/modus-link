@@ -13,10 +13,32 @@ export function ok(data: unknown, status = 200) {
 }
 export function assertOrigin(request: NextRequest) {
   if (["GET", "HEAD", "OPTIONS"].includes(request.method)) return;
-  const expected = new URL(process.env.APP_ORIGIN ?? "http://localhost:3000")
-    .origin;
+  const origins = [process.env.APP_ORIGIN];
+  if (process.env.VERCEL === "1") {
+    // Use deployment metadata, never a wildcard or client-supplied host headers.
+    for (const hostname of [
+      process.env.VERCEL_URL,
+      process.env.VERCEL_BRANCH_URL,
+      process.env.VERCEL_PROJECT_PRODUCTION_URL,
+    ]) {
+      if (hostname) origins.push(`https://${hostname}`);
+    }
+  } else if (!process.env.APP_ORIGIN && process.env.NODE_ENV !== "production") {
+    origins.push("http://localhost:3000");
+  }
+  const allowed = new Set<string>();
+  for (const origin of origins) {
+    if (!origin) continue;
+    try {
+      const url = new URL(origin);
+      if (url.protocol === "https:" || url.protocol === "http:")
+        allowed.add(url.origin);
+    } catch {
+      // An invalid setting must not break other valid deployment origins.
+    }
+  }
   ensure(
-    request.headers.get("origin") === expected,
+    allowed.has(request.headers.get("origin") ?? ""),
     403,
     "INVALID_ORIGIN",
     "Требуется разрешённый Origin",

@@ -6,7 +6,7 @@
 
 Регистрация POST /auth/register и вход POST /auth/login используют `{username,password}` без почты. Регистрация возвращает 201 и создаёт только кабинет сотрудника; вход возвращает 200. Оба маршрута возвращают Actor и выставляют HttpOnly cookie. Формы разделяют «Создать аккаунт» и «Вход»; повторный вход использует уже сохранённые ник и пароль. Ник нечувствителен к регистру, пароль при создании — минимум 12 символов. Для нового пароля используйте autoComplete="new-password", для входа — "current-password", для ника — "username". Занятый ник: 409 USERNAME_TAKEN. Поле Actor.username обязательно, Actor.email допускает null.
 
-Токен не возвращается в JSON, не читается JavaScript и не хранится в localStorage. При загрузке приложения GET /auth/me возвращает актуальные полномочия. Для запросов используйте credentials: same-origin. В браузере Origin для записи выставляется автоматически; APP_ORIGIN должен совпадать с адресом frontend. В development не смешивайте localhost и 127.0.0.1.
+Токен не возвращается в JSON, не читается JavaScript и не хранится в localStorage. При загрузке приложения GET /auth/me возвращает актуальные полномочия. Для запросов используйте credentials: same-origin. В браузере Origin для записи выставляется автоматически; APP_ORIGIN должен совпадать с адресом frontend. На Vercel точные HTTPS-адреса проекта из VERCEL_URL, VERCEL_BRANCH_URL и VERCEL_PROJECT_PRODUCTION_URL разрешаются автоматически при VERCEL=1; дополнительный собственный домен задайте через APP_ORIGIN. В development не смешивайте localhost и 127.0.0.1.
 
 ```typescript
 import type { ApiSuccess, ApiError, TicketDto, CreateTicketInput } from '@/types/api';
