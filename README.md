@@ -50,6 +50,8 @@ npm.cmd run dev
 
 В настройках проекта задайте `DATABASE_URL` для доступного из Vercel PostgreSQL. Локальный адрес `127.0.0.1` из `.env.example` для хостинга не подходит. Файл `vercel.json` задаёт команду сборки `npm run db:migrate && npm run build`: перед сборкой Vercel применяет ожидающие миграции из `prisma/migrations` командой `prisma migrate deploy`. Она создаёт необходимые таблицы, включая `LoginThrottle`, и сохраняет существующие данные. При ошибке миграции сборка останавливается. Для Preview используйте отдельную базу данных в `DATABASE_URL`.
 
+Миграция `202611130001_default_categories` добавляет 18 базовых категорий из локального справочника. Для их появления в форме обращения запускать демонстрационный seed не требуется. Уже существующие категории, их названия, описания и настройки активности сохраняются; демо-пользователи и обращения этой миграцией не создаются.
+
 Адреса текущего деплоя, ветки и основного домена проекта автоматически разрешаются по [системным переменным Vercel](https://vercel.com/docs/environment-variables/system-environment-variables) `VERCEL_URL`, `VERCEL_BRANCH_URL` и `VERCEL_PROJECT_PRODUCTION_URL`, когда `VERCEL=1`. Проверьте, что в Vercel включено **Automatically expose System Environment Variables**. `APP_ORIGIN` на Vercel необязателен; для дополнительного собственного домена укажите полный адрес, например `https://feedback.example.com`. Чужие домены и запросы записи без Origin отклоняются; произвольные поддомены `*.vercel.app` не разрешаются.
 
 После изменения кода или переменных окружения создайте новый deployment (**Redeploy**). В production cookie сессии автоматически использует HTTPS. Вне Vercel для production обязательно задайте `APP_ORIGIN`.
