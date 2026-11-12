@@ -48,7 +48,7 @@ npm.cmd run dev
 
 ## Развёртывание на Vercel
 
-В настройках проекта задайте `DATABASE_URL` для доступного из Vercel PostgreSQL. Локальный адрес `127.0.0.1` из `.env.example` для хостинга не подходит. Перед запуском новой версии примените миграции командой `npm.cmd run db:migrate` с подключением к этой БД. Команда сборки — `npm run build`.
+В настройках проекта задайте `DATABASE_URL` для доступного из Vercel PostgreSQL. Локальный адрес `127.0.0.1` из `.env.example` для хостинга не подходит. Файл `vercel.json` задаёт команду сборки `npm run db:migrate && npm run build`: перед сборкой Vercel применяет ожидающие миграции из `prisma/migrations` командой `prisma migrate deploy`. Она создаёт необходимые таблицы, включая `LoginThrottle`, и сохраняет существующие данные. При ошибке миграции сборка останавливается. Для Preview используйте отдельную базу данных в `DATABASE_URL`.
 
 Адреса текущего деплоя, ветки и основного домена проекта автоматически разрешаются по [системным переменным Vercel](https://vercel.com/docs/environment-variables/system-environment-variables) `VERCEL_URL`, `VERCEL_BRANCH_URL` и `VERCEL_PROJECT_PRODUCTION_URL`, когда `VERCEL=1`. Проверьте, что в Vercel включено **Automatically expose System Environment Variables**. `APP_ORIGIN` на Vercel необязателен; для дополнительного собственного домена укажите полный адрес, например `https://feedback.example.com`. Чужие домены и запросы записи без Origin отклоняются; произвольные поддомены `*.vercel.app` не разрешаются.
 
