@@ -1,13 +1,15 @@
 "use client";
 import { LoginScreen } from "./login-screen";
+import { ThemeToggle } from "./theme-toggle";
+import { HomeShell } from "./home-shell";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
 import type { Actor, DepartmentDto, PageDto, TicketDto } from "@/types/api";
-import { api, writeApi } from "@/lib/client-api";
+import { api, ApiRequestError, writeApi } from "@/lib/client-api";
 import { useResource } from "./use-resource";
 import { Brand, Icon, type IconName } from "./ui/icon";
-import { Loading } from "./ui/shared";
+import { ErrorNotice, Loading } from "./ui/shared";
 import { initials, roleLabels } from "./ui/format";
 const AuthContext = createContext<{
   actor: Actor;
@@ -29,10 +31,12 @@ export interface NoticeDto {
 function Workspace({
   actor,
   logout,
+  logoutError,
   children,
 }: {
   actor: Actor;
   logout: () => Promise<void>;
+  logoutError: string | null;
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
@@ -144,6 +148,8 @@ function Workspace({
       );
     return pathname === href || pathname.startsWith(`${href}/`);
   }
+  if (pathname === "/")
+    return <AuthContext.Provider value={{ actor, department, logout }}><HomeShell actor={actor} unread={unseen} logout={logout} logoutError={logoutError}>{children}</HomeShell></AuthContext.Provider>;
   return (
     <AuthContext.Provider value={{ actor, department, logout }}>
       <div className="workspace" data-role={actor.role.toLowerCase()}>
@@ -233,6 +239,7 @@ function Workspace({
             </form>
           )}
           <div className="topbar-actions">
+            <ThemeToggle />
             <span className="role-pill">
               <Icon
                 name={
@@ -294,6 +301,7 @@ function Workspace({
           </div>
         </header>
         <main id="main-content" className="main-content" key={actor.id}>
+          <ErrorNotice message={logoutError} retry={() => void logout()} />
           {children}
         </main>
       </div>
@@ -303,30 +311,63 @@ function Workspace({
 export function AppFrame({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const [actor, setActor] = useState<Actor | null | undefined>(undefined);
+  const [authError, setAuthError] = useState<string | null>(null);
+  const [logoutError, setLogoutError] = useState<string | null>(null);
+  const [revision, setRevision] = useState(0);
   useEffect(() => {
     let live = true;
     api<Actor>("auth/me")
       .then((user) => {
         if (live) setActor(user);
       })
-      .catch(() => {
-        if (live) setActor(null);
+      .catch((error: unknown) => {
+        if (!live) return;
+        if (error instanceof ApiRequestError && error.status === 401)
+          setActor(null);
+        else
+          setAuthError(
+            "Не удалось проверить сессию. Проверьте подключение и повторите попытку.",
+          );
       });
-    const expire = () => setActor(null);
+    const expire = () => {
+      setAuthError(null);
+      setLogoutError(null);
+      setActor(null);
+    };
     window.addEventListener("modus:session-expired", expire);
     return () => {
       live = false;
       window.removeEventListener("modus:session-expired", expire);
     };
-  }, []);
+  }, [revision]);
   async function logout() {
+    setLogoutError(null);
     try {
       await writeApi("auth/logout", {});
-    } finally {
-      setActor(null);
-      router.replace("/");
+    } catch (error) {
+      if (!(error instanceof ApiRequestError && error.status === 401)) {
+        setLogoutError(
+          "Не удалось выйти. Сессия может оставаться активной. Повторите выход.",
+        );
+        return;
+      }
     }
+    setActor(null);
+    router.replace("/");
   }
+  if (authError)
+    return (
+      <div className="app-loading">
+        <Brand />
+        <ErrorNotice
+          message={authError}
+          retry={() => {
+            setAuthError(null);
+            setRevision((value) => value + 1);
+          }}
+        />
+      </div>
+    );
   if (actor === undefined)
     return (
       <div className="app-loading">
@@ -344,7 +385,12 @@ export function AppFrame({ children }: { children: React.ReactNode }) {
       />
     );
   return (
-    <Workspace key={actor.id} actor={actor} logout={logout}>
+    <Workspace
+      key={actor.id}
+      actor={actor}
+      logout={logout}
+      logoutError={logoutError}
+    >
       {children}
     </Workspace>
   );

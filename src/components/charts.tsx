@@ -3,11 +3,11 @@ import { useId, useState } from "react";
 import type { AnalyticsDto, MetricGroup } from "@/types/api";
 import { shortDate } from "./ui/format";
 export const chartColors = [
-  "#7964ed",
-  "#ffb84b",
-  "#36c8ad",
-  "#577cf1",
-  "#bba9fc",
+  "var(--chart-purple)",
+  "var(--chart-orange)",
+  "var(--chart-green)",
+  "var(--chart-blue)",
+  "var(--chart-lavender)",
 ];
 export function Donut({
   items,
@@ -34,7 +34,7 @@ export function Donut({
             cy="75"
             r="57"
             fill="none"
-            stroke="#f0edf8"
+            stroke="var(--chart-grid)"
             strokeWidth="16"
           />
           {items.map((row, i) => {
@@ -126,9 +126,9 @@ export function TrendChart({ data }: { data: AnalyticsDto["dailyTrend"] }) {
   const id = useId().replaceAll(":", "");
   const [hidden, setHidden] = useState<string[]>([]);
   const series = [
-    { key: "created" as const, label: "Создано", color: "#7964ed" },
-    { key: "responded" as const, label: "Первый ответ", color: "#ffb84b" },
-    { key: "completed" as const, label: "Завершено", color: "#36bd89" },
+    { key: "created" as const, label: "Создано", color: "var(--chart-purple)" },
+    { key: "responded" as const, label: "Первый ответ", color: "var(--chart-orange)" },
+    { key: "completed" as const, label: "Завершено", color: "var(--chart-green)" },
   ];
   const max = Math.max(
     2,
@@ -189,7 +189,7 @@ export function TrendChart({ data }: { data: AnalyticsDto["dailyTrend"] }) {
               x2="665"
               y1={168 - n * 35}
               y2={168 - n * 35}
-              stroke="#eeedf5"
+              stroke="var(--chart-grid)"
               strokeDasharray="3 4"
             />
             <text x="31" y={172 - n * 35} textAnchor="end">

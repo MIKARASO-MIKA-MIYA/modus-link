@@ -263,6 +263,7 @@ export function Brand({ compact = false }: { compact?: boolean }) {
   return (
     <span className={`brand ${compact ? "brand-compact" : ""}`}>
       <svg viewBox="0 0 60 40" aria-hidden="true">
+        {compact ? <image href="/modus-link-logo.png" width="60" height="40" /> : <>
         <defs>
           <linearGradient
             id={compact ? "brand-light" : "brand-color"}
@@ -271,8 +272,8 @@ export function Brand({ compact = false }: { compact?: boolean }) {
             y1="1"
             y2="0"
           >
-            <stop stopColor={compact ? "#a6a9ff" : "#342b94"} />
-            <stop offset="1" stopColor={compact ? "#ffffff" : "#7b70f6"} />
+            <stop stopColor={compact ? "var(--brand-compact-start)" : "var(--brand-start)"} />
+            <stop offset="1" stopColor={compact ? "var(--brand-compact-end)" : "var(--brand-end)"} />
           </linearGradient>
         </defs>
         <path
@@ -281,7 +282,7 @@ export function Brand({ compact = false }: { compact?: boolean }) {
         />
         <path
           d="M18 5q1-3 5-3h4l15 31q2 5-3 5h-4q-3 0-5-3Z"
-          fill={compact ? "#e3e3ff" : "#222751"}
+          fill={compact ? "var(--brand-compact-fill)" : "var(--brand-fill)"}
         />
         <path
           d="M31 25 39 6q2-4 6-4h4L36 35Z"
@@ -289,8 +290,9 @@ export function Brand({ compact = false }: { compact?: boolean }) {
         />
         <path
           d="m43 3 15 30q2 5-3 5h-5q-3 0-4-3L34 12Z"
-          fill={compact ? "#f3f1ff" : "#222751"}
+          fill={compact ? "var(--brand-compact-fill)" : "var(--brand-fill)"}
         />
+        </>}
       </svg>
       <span>MODUS LINK</span>
     </span>

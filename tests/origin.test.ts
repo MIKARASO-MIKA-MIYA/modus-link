@@ -96,6 +96,18 @@ describe("Origin protection on Vercel", () => {
 });
 
 describe("Origin protection outside Vercel", () => {
+  it.each(["localhost", "127.0.0.1"])("accepts loopback aliases only in development with configured host %s", (host) => {
+    vi.stubEnv("NODE_ENV", "development");
+    vi.stubEnv("APP_ORIGIN", `http://${host}:3000`);
+    for (const hostname of ["localhost", "127.0.0.1"])
+      expect(() => assertOrigin(request(`http://${hostname}:3000`))).not.toThrow();
+    for (const origin of ["http://localhost:3001", "https://localhost:3000", "http://localhost.evil.example:3000", "http://192.168.1.1:3000"])
+      expect(() => assertOrigin(request(origin))).toThrow();
+    vi.stubEnv("NODE_ENV", "production");
+    const alias = host === "localhost" ? "127.0.0.1" : "localhost";
+    expect(() => assertOrigin(request(`http://${alias}:3000`))).toThrow();
+  });
+
   it("keeps explicit APP_ORIGIN matching, including the port", () => {
     vi.stubEnv("APP_ORIGIN", "http://127.0.0.1:3100/");
     expect(() => assertOrigin(request("http://127.0.0.1:3100"))).not.toThrow();

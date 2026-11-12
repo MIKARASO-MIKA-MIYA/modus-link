@@ -31,8 +31,18 @@ export function assertOrigin(request: NextRequest) {
     if (!origin) continue;
     try {
       const url = new URL(origin);
-      if (url.protocol === "https:" || url.protocol === "http:")
+      if (url.protocol === "https:" || url.protocol === "http:") {
         allowed.add(url.origin);
+        // Next dev advertises 127.0.0.1 while local setup uses localhost.
+        // Keep the scheme/port exact and never extend production trust.
+        if (
+          process.env.NODE_ENV === "development" &&
+          ["localhost", "127.0.0.1"].includes(url.hostname)
+        ) {
+          url.hostname = url.hostname === "localhost" ? "127.0.0.1" : "localhost";
+          allowed.add(url.origin);
+        }
+      }
     } catch {
       // An invalid setting must not break other valid deployment origins.
     }
