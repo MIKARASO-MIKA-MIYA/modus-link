@@ -1,0 +1,71 @@
+/* Analytics only: shared HomeShell and palette, no changes to Dashboard. */
+.workspace-analytics { --chart-grid: var(--home-line); --bar-fill: var(--home-plot); }
+.workspace-analytics .analytics-page { display: grid; gap: 16px; min-width: 0; }
+.workspace-analytics .page-heading { margin: 0; gap: 16px; flex-wrap: wrap; }
+.workspace-analytics .page-heading h1 { font-size: 30px; line-height: 1.15; }
+.workspace-analytics .page-heading p { font-size: 14px; margin-bottom: 0; }
+.workspace-analytics .analytics-actions { gap: 10px; flex-wrap: wrap; }
+.workspace-analytics .analytics-actions label { font-size: 14px; }
+.workspace-analytics .analytics-actions select { min-height: 44px; padding: 10px 12px; border-radius: 12px; background: var(--home-surface); color: var(--home-text); font-size: 14px; }
+.workspace-analytics .button { border-radius: 30px; min-height: 44px; padding: 11px 18px; font-size: 14px; }
+.workspace-analytics .button-primary { box-shadow: none; }
+.workspace-analytics .panel { padding: 18px; border: 1px solid var(--home-line); border-radius: 22px; background: var(--home-surface); box-shadow: 0 2px 6px var(--home-shadow); min-width: 0; margin: 0; }
+.workspace-analytics .panel h2 { font-size: 17px; margin-bottom: 12px; }
+.workspace-analytics .analytics-context { display: grid; gap: 6px; }
+.workspace-analytics .analytics-context p { margin: 0; font-size: 12px; line-height: 1.5; color: var(--home-muted); }
+.workspace-analytics .analytics-help { font-size: 12px; line-height: 1.5; color: var(--home-muted); margin: 0 0 10px; }
+.workspace-analytics .analytics-help:last-child { margin-bottom: 0; }
+.workspace-analytics .analytics-metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin: 0; }
+.workspace-analytics .metric-card { min-width: 0; min-height: 108px; padding: 16px; border-radius: 20px; gap: 12px; background: var(--home-surface); border: 1px solid var(--home-line); box-shadow: 0 2px 6px var(--home-shadow); }
+.workspace-analytics .metric-icon { width: 36px; height: 36px; flex-shrink: 0; }
+.workspace-analytics .metric-icon svg { width: 22px; height: 22px; }
+.workspace-analytics .metric-label { font-size: 13px; }
+.workspace-analytics .metric-body strong { font-size: 30px; }
+.workspace-analytics .metric-body small { font-size: 12px; line-height: 1.4; }
+.workspace-analytics .analytics-grid { grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr); gap: 16px; }
+.workspace-analytics .analytics-types .donut-layout { flex-wrap: wrap; gap: 16px; justify-content: center; }
+.workspace-analytics .donut-wrap { width: 150px; flex: 0 0 150px; }
+.workspace-analytics .chart-legend { min-width: 0; flex: 1; }
+.workspace-analytics .chart-legend > div { font-size: 13px; }
+.workspace-analytics .chart-legend > div > span:nth-child(2) { min-width: 0; overflow-wrap: anywhere; }
+.workspace-analytics .trend-legend { justify-content: flex-start; gap: 8px 14px; }
+.workspace-analytics .trend-legend button { font-size: 12px; min-height: 32px; }
+.workspace-analytics .trend-legend .legend-disabled { opacity: 1; color: var(--home-muted); }
+.workspace-analytics .trend-chart { overflow-x: auto; margin: 12px 0; }
+.workspace-analytics .trend-chart svg { min-width: 560px; }
+.workspace-analytics .trend-chart svg text { font-size: 12px; }
+.workspace-analytics .bar-row { grid-template-columns: minmax(120px, 1fr) minmax(80px, 2fr) 45px; font-size: 13px; gap: 12px; }
+.workspace-analytics .bar-row > span { white-space: normal; overflow: visible; overflow-wrap: anywhere; }
+.workspace-analytics .bar-row strong { font-size: 13px; }
+.workspace-analytics .bar-track { border-radius: 10px; }
+.workspace-analytics .bar-track > div { border-radius: 10px; }
+.workspace-analytics .panel-heading { gap: 12px; flex-wrap: wrap; }
+.workspace-analytics .panel-heading h2 { margin: 0; }
+.workspace-analytics .data-table { min-width: 680px; font-size: 13px; }
+.workspace-analytics .data-table th { padding: 9px 10px; font-size: 12px; color: var(--home-text); border: 0; }
+.workspace-analytics .data-table th:first-child { border-radius: 11px 0 0 11px; }
+.workspace-analytics .data-table th:last-child { border-radius: 0 11px 11px 0; }
+.workspace-analytics .data-table td { padding: 11px 10px; }
+.workspace-analytics .data-table td:first-child { min-width: 180px; max-width: 340px; overflow-wrap: anywhere; }
+.workspace-analytics .analytics-additional { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+.workspace-analytics .analytics-additional h2 { font-size: 14px; margin-bottom: 8px; }
+.workspace-analytics .analytics-additional strong { display: block; font-size: 23px; margin-bottom: 8px; }
+.workspace-analytics .notice { margin: 0; }
+@media (max-width: 1350px) {
+  .workspace-analytics .analytics-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .workspace-analytics .analytics-grid { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 900px) {
+  .workspace-analytics .analytics-additional { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+}
+@media (max-width: 600px) {
+  .workspace-analytics .page-heading h1 { font-size: 27px; }
+  .workspace-analytics .panel { padding: 14px; border-radius: 20px; }
+  .workspace-analytics .analytics-actions { width: 100%; }
+  .workspace-analytics .analytics-actions label { min-width: 0; flex: 1; flex-wrap: wrap; }
+  .workspace-analytics .analytics-actions select { min-width: 0; max-width: 100%; font-size: 16px; }
+  .workspace-analytics .analytics-metrics { grid-template-columns: minmax(0, 1fr); }
+  .workspace-analytics .bar-row { grid-template-columns: minmax(0, 1fr) 40px; gap: 6px; }
+  .workspace-analytics .bar-track { grid-row: 2; grid-column: 1 / -1; }
+  .workspace-analytics .bar-row strong { grid-column: 2; grid-row: 1; }
+}

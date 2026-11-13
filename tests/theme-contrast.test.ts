@@ -36,33 +36,35 @@ for (const [name, tokens] of Object.entries({ light, dark })) {
     it.each(textPairs)("%s on %s is at least 4.5:1", (foreground, background) => {
       expect(contrast(resolve(tokens, foreground), resolve(tokens, background))).toBeGreaterThanOrEqual(4.5);
     });
-    it.each(["--primary-fill", "--primary-hover", "--nav-fill"])("text on every %s gradient stop is at least 4.5:1", (background) => {
-      const foreground = resolve(tokens, background === "--nav-fill" ? "--nav-text" : "--on-primary");
+    it.each(["--primary-fill", "--primary-hover"])("text on %s is at least 4.5:1", (background) => {
+      const foreground = resolve(tokens, "--on-primary");
       for (const stop of resolve(tokens, background).match(/#[\da-f]{6}/gi)!)
         expect(contrast(foreground, stop)).toBeGreaterThanOrEqual(4.5);
     });
-    it.each(["--metric-fill", "--metric-warning-fill", "--metric-success-fill", "--banner-fill", "--login-fill"])("secondary text on every %s gradient stop is at least 4.5:1", (background) => {
+    it.each(["--panel-fill", "--login-fill", "--login-choice-fill"])("secondary text on %s is at least 4.5:1", (background) => {
       const foreground = resolve(tokens, "--muted-on-tint");
       for (const stop of resolve(tokens, background).match(/#[\da-f]{6}\b/gi)!)
         expect(contrast(foreground, stop)).toBeGreaterThanOrEqual(4.5);
     });
-    it("avatar initials remain readable at both ends of the avatar gradient", () => {
-      for (const stop of resolve(tokens, "--avatar-fill").match(/#[\da-f]{6}/gi)!)
+    it("avatar initials remain readable", () => {
+      for (const stop of resolve(tokens, "--profile-avatar-fill").match(/#[\da-f]{6}/gi)!)
         expect(contrast(resolve(tokens, "--ink"), stop)).toBeGreaterThanOrEqual(4.5);
     });
-    it.each(["--control-border", "--focus", "--chart-purple", "--chart-orange", "--chart-green", "--chart-blue", "--chart-lavender", "--chart-error"])("%s against surface is at least 3:1", (foreground) => {
+    it.each(["--control-border", "--focus", "--chart-primary", "--chart-orange", "--chart-green", "--chart-blue", "--chart-secondary", "--chart-error"])("%s against surface is at least 3:1", (foreground) => {
       expect(contrast(resolve(tokens, foreground), resolve(tokens, "--surface"))).toBeGreaterThanOrEqual(3);
     });
   });
 }
 
 it("keeps component colors centralized and all referenced color tokens defined", () => {
+  const homeCss = readFileSync(new URL("../src/app/home.css", import.meta.url), "utf8");
+  const homeTokens = declarations(homeCss.match(/\.workspace-home\s*\{([^}]+)\}/)![1]);
   const sources = ["app/globals.css", "components/charts.tsx", "components/dashboard.tsx", "components/ui/icon.tsx"];
   for (const file of sources) {
     const source = readFileSync(new URL(`../src/${file}`, import.meta.url), "utf8");
     expect(source).not.toMatch(/#[\da-f]{3,8}\b/i);
     for (const match of source.matchAll(/var\((--[\w-]+)/g)) {
-      if (!["--sidebar-width", "--header-height"].includes(match[1])) expect(light).toHaveProperty(match[1]);
+      if (!["--sidebar-width", "--header-height"].includes(match[1])) expect(file === "components/charts.tsx" ? { ...light, ...homeTokens } : light).toHaveProperty(match[1]);
     }
   }
 });

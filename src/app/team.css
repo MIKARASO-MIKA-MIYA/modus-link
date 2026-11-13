@@ -1,0 +1,47 @@
+/* /team only. Other AdminDirectory screens keep their existing appearance. */
+.workspace-team .team-page { display: grid; gap: 16px; min-width: 0; }
+.workspace-team .page-heading { margin: 0; gap: 16px; flex-wrap: wrap; }
+.workspace-team .page-heading h1 { font-size: 30px; line-height: 1.15; }
+.workspace-team .page-heading p { font-size: 14px; margin-bottom: 0; }
+.workspace-team .button { min-height: 44px; padding: 11px 18px; border-radius: 30px; font-size: 14px; white-space: normal; text-align: center; }
+.workspace-team .button-primary { box-shadow: none; }
+.workspace-team .directory-panel { padding: 14px 16px; border-radius: 22px; border: 1px solid var(--home-line); background: var(--home-surface); box-shadow: 0 2px 6px var(--home-shadow); margin: 0; min-width: 0; overflow: visible; }
+.workspace-team .directory-table { min-width: 780px; font-size: 13px; }
+.workspace-team .directory-table th { padding: 9px 10px; font-size: 12px; color: var(--home-text); border-bottom: 0; }
+.workspace-team .directory-table th:first-child { border-radius: 11px 0 0 11px; }
+.workspace-team .directory-table th:last-child { border-radius: 0 11px 11px 0; }
+.workspace-team .directory-table td { padding: 11px 10px; border-bottom: 1px solid var(--home-line); }
+.workspace-team .directory-table td:first-child { min-width: 170px; }
+.workspace-team .directory-table td { max-width: 240px; overflow-wrap: anywhere; }
+.workspace-team .author-cell { min-width: 0; }
+.workspace-team .author-cell > span:last-child { min-width: 0; overflow-wrap: anywhere; }
+.workspace-team .avatar { width: 30px; height: 30px; font-size: 12px; flex-shrink: 0; }
+.workspace-team .category-chip { background: var(--home-soft); border-radius: 20px; font-size: 12px; white-space: nowrap; }
+.workspace-team .team-help { font-size: 12px; color: var(--home-muted); line-height: 1.5; margin: 0; }
+.workspace-team .team-activity { display: inline-flex; border-radius: 20px; padding: 5px 9px; color: var(--success); background: var(--success-bg); font-size: 12px; white-space: nowrap; }
+.workspace-team .team-activity.is-inactive { color: var(--home-muted); background: var(--home-soft); }
+.workspace-team .team-permission { font-size: 12px; }
+.workspace-team .directory-table .icon-button { width: 36px; height: 36px; border-radius: 10px; }
+.workspace-team .events-pagination { margin: 0; gap: 12px; flex-wrap: wrap; font-size: 13px; }
+.workspace-team .notice { margin: 0; font-size: 13px; overflow-wrap: anywhere; }
+.workspace-team .loading-state,
+.workspace-team .empty-state { min-height: 160px; }
+.workspace-team .modal { border-radius: 22px; padding: 22px; background: var(--home-surface); color: var(--home-text); border: 1px solid var(--home-line); box-shadow: 0 8px 24px var(--shadow-dialog); }
+.workspace-team .modal-heading h2 { font-size: 20px; overflow-wrap: anywhere; }
+.workspace-team .modal .form-stack { gap: 16px; }
+.workspace-team .modal label { font-size: 14px; min-width: 0; }
+.workspace-team .modal input:not([type="checkbox"]),
+.workspace-team .modal select { font-size: 14px; width: 100%; min-width: 0; border-radius: 12px; padding: 11px 12px; min-height: 44px; background: var(--home-surface); color: var(--home-text); }
+.workspace-team .modal input[type="checkbox"] { accent-color: var(--home-error); flex-shrink: 0; }
+.workspace-team .modal [aria-invalid="true"] { border-color: var(--error); }
+.workspace-team .field-error { font-size: 12px; font-weight: 400; line-height: 1.5; margin: 0; }
+.workspace-team .form-help { font-size: 12px; line-height: 1.5; }
+.workspace-team .modal .form-actions { flex-wrap: wrap; gap: 10px; }
+@media (max-width: 600px) {
+  .workspace-team .page-heading h1 { font-size: 27px; }
+  .workspace-team .directory-panel { padding: 12px; border-radius: 20px; }
+  .workspace-team .modal { padding: 16px; }
+  .workspace-team .modal .form-row { grid-template-columns: minmax(0, 1fr); }
+  .workspace-team .modal input:not([type="checkbox"]),
+  .workspace-team .modal select { font-size: 16px; }
+}

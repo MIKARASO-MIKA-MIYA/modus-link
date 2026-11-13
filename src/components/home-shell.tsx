@@ -11,8 +11,8 @@ import { initials, roleLabels } from "./ui/format";
 import { ThemeToggle } from "./theme-toggle";
 import { HomeIcon } from "./home-icons";
 
-export function HomeShell({ actor, unread, logout, logoutError, children }: {
-  actor: Actor; unread: number; logout: () => Promise<void>; logoutError: string | null; children: ReactNode;
+export function HomeShell({ actor, unread, logout, logoutError, children, pathname = "/" }: {
+  actor: Actor; unread: number; logout: () => Promise<void>; logoutError: string | null; children: ReactNode; pathname?: string;
 }) {
   const router = useRouter();
   const input = useRef<HTMLInputElement>(null);
@@ -45,12 +45,13 @@ export function HomeShell({ actor, unread, logout, logoutError, children }: {
     ] : []),
   ];
   function links(items: typeof main) {
-    return items.map(item => <Link key={item.href} href={item.href} className={`home-nav-link${item.href === "/" ? " is-active" : ""}`} aria-current={item.href === "/" ? "page" : undefined} onClick={() => setMenuOpen(false)}>
+    const activePath = pathname.startsWith("/tickets/") && pathname !== "/tickets/new" ? "/tickets" : pathname.startsWith("/settings/") && pathname !== "/settings/categories" ? "/settings" : pathname;
+    return items.map(item => <Link key={item.href} href={item.href} className={`home-nav-link${item.href === activePath ? " is-active" : ""}`} aria-current={item.href === activePath ? "page" : undefined} onClick={() => setMenuOpen(false)}>
       <Icon name={item.icon} size={27} /><span>{item.title}</span>
       {item.badge !== undefined && item.badge > 0 && <span className="home-nav-count" aria-label={`${item.badge} доступных обращений`}>{item.badge}</span>}
     </Link>);
   }
-  return <div className="workspace-home">
+  return <div className={`workspace-home${pathname === "/" ? "" : pathname === "/tickets" ? " workspace-registry" : pathname === "/tickets/new" ? " workspace-create" : pathname.startsWith("/tickets/") ? " workspace-detail" : pathname === "/analytics" ? " workspace-analytics" : pathname === "/team" ? " workspace-team" : pathname === "/settings/categories" ? " workspace-categories" : pathname === "/settings/departments" ? " workspace-departments" : pathname === "/settings/routing" ? " workspace-routing" : " workspace-content"}`}>
     <a className="skip-link" href="#main-content">Перейти к содержимому</a>
     {menuOpen && <button className="home-sidebar-scrim" aria-label="Закрыть навигацию" onClick={() => setMenuOpen(false)} />}
     <aside id="home-sidebar" className={`home-sidebar${menuOpen ? " is-open" : ""}`}>
@@ -58,7 +59,7 @@ export function HomeShell({ actor, unread, logout, logoutError, children }: {
       <nav aria-label="Основная навигация">{links(main)}
         {administration.length > 0 && <div className="home-nav-secondary">{links(administration)}</div>}
       </nav>
-      <Link className="home-support" href="/help"><HomeIcon kind="support" /><span><strong>Поддержка</strong><small>Помощь и инструкции</small></span><Icon name="chevron" size={20} /></Link>
+      <Link className="home-support" href="/help" aria-current={pathname === "/help" ? "page" : undefined}><HomeIcon kind="support" /><span><strong>Поддержка</strong><small>Помощь и инструкции</small></span><Icon name="chevron" size={20} /></Link>
     </aside>
     <header className="home-topbar">
       <button className="home-round-button home-menu-toggle" aria-label="Открыть навигацию" aria-controls="home-sidebar" aria-expanded={menuOpen} onClick={() => setMenuOpen(!menuOpen)}><Icon name="menu" /></button>
@@ -72,12 +73,12 @@ export function HomeShell({ actor, unread, logout, logoutError, children }: {
       <div className="home-header-controls">
         <span className="home-language" aria-label="Язык интерфейса — русский"><HomeIcon kind="globe" /><strong>RU</strong></span>
         <ThemeToggle />
-        <Link href="/notifications" className="home-round-button home-notifications" aria-label={`Уведомления${unread ? `: ${unread} новых` : ""}`}><Icon name="bell" size={27} />{unread > 0 && <span className="home-unread-dot" />}</Link>
+        <Link href="/notifications" className="home-round-button home-notifications" aria-current={pathname === "/notifications" ? "page" : undefined} aria-label={`Уведомления${unread ? `: ${unread} новых` : ""}`}><Icon name="bell" size={27} />{unread > 0 && <span className="home-unread-dot" />}</Link>
         <div className="home-profile">
-          <button className="home-profile-trigger" aria-expanded={profileOpen} aria-controls="home-profile-menu" onClick={() => setProfileOpen(!profileOpen)}>
+          <button className="home-profile-trigger" aria-current={pathname === "/profile" ? "page" : undefined} aria-expanded={profileOpen} aria-controls="home-profile-menu" onClick={() => setProfileOpen(!profileOpen)}>
             <span className="home-avatar">{initials(actor.name)}</span><span className="home-profile-name"><strong title={actor.name}>{actor.name}</strong><small>{role}</small></span><Icon name="chevron" size={17} />
           </button>
-          {profileOpen && <><button className="menu-dismiss" aria-label="Закрыть меню профиля" onClick={() => setProfileOpen(false)} /><div id="home-profile-menu" className="home-profile-menu"><Link href="/profile">Мой профиль</Link><button onClick={() => { setProfileOpen(false); void logout(); }}>Выход</button></div></>}
+          {profileOpen && <><button className="menu-dismiss" aria-label="Закрыть меню профиля" onClick={() => setProfileOpen(false)} /><div id="home-profile-menu" className="home-profile-menu"><Link href="/profile" aria-current={pathname === "/profile" ? "page" : undefined} onClick={() => setProfileOpen(false)}>Мой профиль</Link><button onClick={() => { setProfileOpen(false); void logout(); }}>Выход</button></div></>}
         </div>
       </div>
     </header>

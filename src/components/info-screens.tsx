@@ -120,7 +120,7 @@ export function NotificationsScreen() {
             </Link>
           ))
         ) : (
-          <EmptyState
+          !resource.error && <EmptyState
             title="Новых событий пока нет"
             text="Здесь появятся ответы и изменения по вашим обращениям."
           />

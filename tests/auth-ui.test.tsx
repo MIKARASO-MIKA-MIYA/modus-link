@@ -58,12 +58,23 @@ afterEach(async () => {
 });
 
 describe("Session restoration and logout UI", () => {
-  it("keeps the existing shell on routes other than the homepage", async () => {
-    mocks.pathname = "/tickets";
+  it("keeps the common shell on an unmatched URL instead of restoring the legacy layout", async () => {
+    mocks.pathname = "/missing-page";
     mocks.api.mockResolvedValue(actor);
     await mount();
-    expect(container.querySelector(".workspace-home")).toBeNull();
-    expect(container.querySelector(".workspace .sidebar")).not.toBeNull();
+    expect(container.querySelector(".workspace-content .home-sidebar")).not.toBeNull();
+    expect(container.querySelector(".workspace .sidebar")).toBeNull();
+  });
+  it.each(["/", "/tickets", "/tickets/new", "/tickets/example", "/analytics", "/team", "/settings", "/settings/categories", "/settings/departments", "/settings/routing", "/profile", "/notifications", "/help"])("uses the shared homepage shell on %s", async pathname => {
+    mocks.pathname = pathname;
+    mocks.api.mockResolvedValue(pathname.startsWith("/settings") ? { ...actor, role: "ADMIN" } : pathname === "/team" ? { ...actor, role: "MANAGER" } : actor);
+    await mount();
+    expect(container.querySelector(".workspace-home .home-sidebar")).not.toBeNull();
+    expect(container.querySelector(".workspace .sidebar")).toBeNull();
+    expect(container.querySelectorAll(".home-sidebar")).toHaveLength(1);
+    expect(container.querySelectorAll(".home-topbar")).toHaveLength(1);
+    if (pathname === "/profile") expect(container.querySelector('.home-profile-trigger[aria-current="page"]')).not.toBeNull();
+    else expect(container.querySelector('[aria-current="page"]')?.getAttribute("href")).toBe(pathname === "/tickets/example" ? "/tickets" : pathname === "/settings/departments" || pathname === "/settings/routing" ? "/settings" : pathname);
   });
   it("shows login for an unauthenticated session", async () => {
     mocks.api.mockRejectedValue(new ApiRequestError(401, "UNAUTHENTICATED", "Войдите"));

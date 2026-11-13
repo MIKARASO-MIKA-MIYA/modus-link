@@ -1,0 +1,114 @@
+/* Scoped detail styling. Shared colors come from the migrated-section tokens. */
+.workspace-detail { --timeline-fill: var(--home-soft); }
+.workspace-detail .ticket-detail-page { display: grid; gap: 16px; min-width: 0; }
+.workspace-detail .back-link { margin: 0; width: fit-content; font-size: 13px; }
+.workspace-detail .ticket-detail-heading { margin: 0; gap: 12px; align-items: flex-start; }
+.workspace-detail .ticket-detail-heading h1 { font-size: 28px; line-height: 1.3; min-width: 0; overflow-wrap: anywhere; }
+.workspace-detail .ticket-detail-heading .status-badge { flex-shrink: 0; margin-top: 4px; border-radius: 20px; font-size: 12px; }
+.workspace-detail .ticket-meta { margin: 0; gap: 10px 18px; font-size: 13px; }
+.workspace-detail .ticket-meta > span { min-width: 0; overflow-wrap: anywhere; }
+.workspace-detail .ticket-meta > span > svg { flex-shrink: 0; }
+.workspace-detail .ticket-meta > .text-button { font-size: 13px; }
+.workspace-detail .ticket-detail-grid { grid-template-columns: minmax(0, 1fr) 320px; gap: 16px; }
+.workspace-detail .ticket-main,
+.workspace-detail .ticket-aside { gap: 16px; min-width: 0; }
+.workspace-detail .panel { padding: 18px; margin: 0; border: 1px solid var(--home-line); border-radius: 22px; background: var(--home-surface); box-shadow: 0 2px 6px var(--home-shadow); min-width: 0; }
+.workspace-detail .panel-title { font-size: 17px; margin-bottom: 12px; }
+.workspace-detail .panel-title svg { width: 22px; height: 22px; flex-shrink: 0; }
+.workspace-detail .detail-resource-note { font-size: 12px; line-height: 1.5; color: var(--home-muted); margin: 0 0 12px; }
+.workspace-detail .progress-stages { margin: 0; }
+.workspace-detail .progress-stages strong { font-size: 12px; line-height: 1.4; }
+.workspace-detail .progress-stages small { font-size: 12px; line-height: 1.5; }
+.workspace-detail .progress-stages li { min-width: 0; overflow-wrap: anywhere; }
+.workspace-detail .ticket-description,
+.workspace-detail .resolution-text { font-size: 14px; line-height: 1.65; overflow-wrap: anywhere; }
+.workspace-detail .resolution-text { background: var(--home-soft); color: var(--home-text); border-radius: 12px; }
+.workspace-detail .discussion-panel { padding-top: 0; }
+.workspace-detail .detail-tabs { gap: 16px; margin-bottom: 16px; overflow-x: auto; }
+.workspace-detail .detail-tabs > button { min-height: 48px; padding: 12px 0; font-size: 14px; flex-shrink: 0; }
+.workspace-detail .detail-tabs > button > span { font-size: 12px; }
+.workspace-detail .comment-row { padding: 14px 0; }
+.workspace-detail .comment-row header { gap: 6px 12px; }
+.workspace-detail .comment-row header strong,
+.workspace-detail .comment-row p { font-size: 14px; }
+.workspace-detail .comment-row time,
+.workspace-detail .internal-label { font-size: 12px; }
+.workspace-detail .avatar { width: 30px; height: 30px; font-size: 12px; flex-shrink: 0; }
+.workspace-detail .comment-composer form { border-radius: 12px; min-width: 0; }
+.workspace-detail .comment-composer textarea { font-size: 14px; resize: vertical; line-height: 1.5; border-radius: 8px; }
+.workspace-detail .comment-composer textarea:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
+.workspace-detail .composer-actions { gap: 10px; flex-wrap: wrap; }
+.workspace-detail .composer-actions .checkbox,
+.workspace-detail .composer-actions .text-button { font-size: 12px; }
+.workspace-detail .property-row { gap: 10px; padding: 0 0 14px; border-bottom: 1px solid var(--home-line); }
+.workspace-detail .property-row + .property-row { padding: 14px 0; border-bottom: 1px solid var(--home-line); }
+.workspace-detail .property-row:last-child { padding-bottom: 0; border-bottom: 0; }
+.workspace-detail .property-row > div { flex: 1; overflow-wrap: anywhere; }
+.workspace-detail .property-row h3 { font-size: 13px; margin-bottom: 8px; }
+.workspace-detail .property-row > div > div,
+.workspace-detail .property-row > div > span { font-size: 14px; }
+.workspace-detail .property-person small,
+.workspace-detail .detail-department { display: block; font-size: 12px; color: var(--home-muted); line-height: 1.5; margin-top: 4px; }
+.workspace-detail .property-person > span:last-child { min-width: 0; }
+.workspace-detail .property-edit { flex: 0 0 32px; width: 32px; height: 32px; border-radius: 10px; }
+.workspace-detail .deadline-label { font-size: 12px; border-radius: 10px; }
+.workspace-detail .history-timeline strong { font-size: 13px; }
+.workspace-detail .history-timeline small,
+.workspace-detail .full-history p { font-size: 12px; }
+.workspace-detail .history-timeline li { overflow-wrap: anywhere; }
+.workspace-detail .history-summary .latest-event { background: var(--home-soft); }
+.workspace-detail .attachment-row { gap: 12px; padding: 12px; border-radius: 14px; }
+.workspace-detail .attachment-row > span:nth-child(2) { flex: 1; min-width: 0; }
+.workspace-detail .attachment-row strong { font-size: 14px; white-space: normal; overflow: visible; overflow-wrap: anywhere; }
+.workspace-detail .attachment-row small { font-size: 12px; line-height: 1.5; }
+.workspace-detail .attachment-row > svg,
+.workspace-detail .attachment-icon { flex-shrink: 0; }
+.workspace-detail .events-pagination { font-size: 12px; gap: 12px; flex-wrap: wrap; }
+.workspace-detail .button { border-radius: 30px; min-height: 44px; padding: 11px 16px; font-size: 14px; white-space: normal; text-align: center; }
+.workspace-detail .button-primary { box-shadow: none; }
+.workspace-detail .status-badge { border-radius: 20px; }
+.workspace-detail .status-under_review { background: var(--home-error-bg); color: var(--home-error); }
+.workspace-detail .form-help,
+.workspace-detail .small { font-size: 12px; }
+.workspace-detail .notice { margin: 0; font-size: 13px; flex-wrap: wrap; overflow-wrap: anywhere; }
+.workspace-detail textarea,
+.workspace-detail select,
+.workspace-detail input:not([type="checkbox"]):not([type="file"]) { font-size: 14px; }
+.workspace-detail .resolution-panel textarea,
+.workspace-detail .resolution-panel select { padding: 10px 12px; border-radius: 12px; font-size: 14px; background: var(--home-surface); }
+.workspace-detail .resolution-panel select { min-height: 44px; }
+.workspace-detail input[type="checkbox"] { accent-color: var(--home-error); }
+.workspace-detail .modal { border-radius: 22px; padding: 22px; max-width: min(600px, calc(100vw - 24px)); background: var(--home-surface); color: var(--home-text); border: 1px solid var(--home-line); box-shadow: 0 8px 24px var(--shadow-dialog); }
+.workspace-detail .modal h2 { font-size: 20px; overflow-wrap: anywhere; }
+.workspace-detail .modal .form-stack { gap: 16px; }
+.workspace-detail .modal .form-stack > label { font-size: 14px; }
+.workspace-detail .modal input,
+.workspace-detail .modal select,
+.workspace-detail .modal textarea { border-radius: 12px; }
+.workspace-detail .modal .form-actions { flex-wrap: wrap; gap: 10px; }
+.workspace-detail .dropzone { border-radius: 14px; padding: 16px; }
+.workspace-detail .dropzone > span:last-child { min-width: 0; overflow-wrap: anywhere; }
+.workspace-detail .dropzone strong { font-size: 14px; }
+.workspace-detail .dropzone small,
+.workspace-detail .selected-files li small,
+.workspace-detail .field-error { font-size: 12px; }
+.workspace-detail .selected-files li { border-radius: 12px; font-size: 13px; }
+@media (max-width: 1200px) {
+  .workspace-detail .ticket-detail-grid { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 600px) {
+  .workspace-detail .ticket-detail-heading { flex-wrap: wrap; }
+  .workspace-detail .ticket-detail-heading h1 { font-size: 24px; }
+  .workspace-detail .panel { padding: 14px; border-radius: 20px; }
+  .workspace-detail .discussion-panel { padding-top: 0; }
+  .workspace-detail .progress-stages { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+  .workspace-detail .progress-stages li { width: auto; }
+  .workspace-detail .progress-stages li:not(:last-child):after { display: none; }
+  .workspace-detail .comment-composer > .avatar { display: none; }
+  .workspace-detail .comment-composer form { width: 100%; }
+  .workspace-detail .detail-tabs { gap: 12px; }
+  .workspace-detail textarea,
+  .workspace-detail select,
+  .workspace-detail .modal input { font-size: 16px; }
+  .workspace-detail .modal { padding: 16px; }
+}

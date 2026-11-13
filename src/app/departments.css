@@ -1,0 +1,39 @@
+/* Department administration only; shared colors are inherited from HomeShell. */
+.workspace-departments .departments-page { display: grid; gap: 16px; min-width: 0; }
+.workspace-departments .back-link { margin: 0; width: fit-content; font-size: 13px; }
+.workspace-departments .page-heading { margin: 0; gap: 16px; flex-wrap: wrap; }
+.workspace-departments .page-heading h1 { font-size: 30px; line-height: 1.15; }
+.workspace-departments .page-heading p { font-size: 14px; margin-bottom: 0; }
+.workspace-departments .button { min-height: 44px; padding: 11px 18px; border-radius: 30px; font-size: 14px; white-space: normal; text-align: center; }
+.workspace-departments .button-primary { box-shadow: none; }
+.workspace-departments .directory-panel { padding: 14px 16px; border-radius: 22px; border: 1px solid var(--home-line); background: var(--home-surface); box-shadow: 0 2px 6px var(--home-shadow); min-width: 0; margin: 0; overflow: visible; }
+.workspace-departments .directory-table { min-width: 440px; font-size: 14px; }
+.workspace-departments .directory-table th { padding: 9px 10px; font-size: 12px; border-bottom: 0; color: var(--home-text); }
+.workspace-departments .directory-table th:first-child { border-radius: 11px 0 0 11px; }
+.workspace-departments .directory-table th:last-child { border-radius: 0 11px 11px 0; }
+.workspace-departments .directory-table td { padding: 11px 10px; border-bottom: 1px solid var(--home-line); }
+.workspace-departments .directory-table td:first-child { min-width: 200px; max-width: 700px; overflow-wrap: anywhere; }
+.workspace-departments .directory-status { font-size: 12px; border-radius: 20px; padding: 5px 9px; }
+.workspace-departments .directory-table .icon-button { width: 36px; height: 36px; border-radius: 10px; }
+.workspace-departments .department-help { font-size: 12px; color: var(--home-muted); line-height: 1.5; margin: 0; font-weight: 400; }
+.workspace-departments .events-pagination { margin: 0; gap: 12px; flex-wrap: wrap; font-size: 13px; }
+.workspace-departments .notice { margin: 0; font-size: 13px; overflow-wrap: anywhere; }
+.workspace-departments .empty-state,
+.workspace-departments .loading-state { min-height: 160px; }
+.workspace-departments .modal { padding: 22px; border-radius: 22px; background: var(--home-surface); color: var(--home-text); border: 1px solid var(--home-line); box-shadow: 0 8px 24px var(--shadow-dialog); }
+.workspace-departments .modal-heading h2 { font-size: 20px; overflow-wrap: anywhere; }
+.workspace-departments .modal .form-stack { gap: 16px; }
+.workspace-departments .modal label { font-size: 14px; min-width: 0; }
+.workspace-departments .modal input:not([type="checkbox"]) { font-size: 14px; min-height: 44px; padding: 11px 12px; width: 100%; min-width: 0; border-radius: 12px; background: var(--home-surface); color: var(--home-text); }
+.workspace-departments .modal input[type="checkbox"] { accent-color: var(--home-error); flex-shrink: 0; }
+.workspace-departments .modal .checkbox { flex-wrap: wrap; }
+.workspace-departments .modal .checkbox .field-error { flex-basis: 100%; }
+.workspace-departments .modal [aria-invalid="true"] { border-color: var(--error); }
+.workspace-departments .field-error { font-size: 12px; font-weight: 400; line-height: 1.5; margin: 0; }
+.workspace-departments .modal .form-actions { flex-wrap: wrap; gap: 10px; }
+@media (max-width: 600px) {
+  .workspace-departments .page-heading h1 { font-size: 27px; }
+  .workspace-departments .directory-panel { padding: 12px; border-radius: 20px; }
+  .workspace-departments .modal { padding: 16px; }
+  .workspace-departments .modal input:not([type="checkbox"]) { font-size: 16px; }
+}

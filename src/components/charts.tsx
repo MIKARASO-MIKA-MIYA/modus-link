@@ -1,13 +1,13 @@
 "use client";
-import { useId, useState } from "react";
+import { useState } from "react";
 import type { AnalyticsDto, MetricGroup } from "@/types/api";
 import { shortDate } from "./ui/format";
 export const chartColors = [
-  "var(--chart-purple)",
-  "var(--chart-orange)",
-  "var(--chart-green)",
-  "var(--chart-blue)",
-  "var(--chart-lavender)",
+  "var(--home-plot)",
+  "var(--home-red)",
+  "var(--home-active)",
+  "var(--home-success)",
+  "var(--home-muted)",
 ];
 export function Donut({
   items,
@@ -19,6 +19,7 @@ export function Donut({
   caption?: string;
 }) {
   const total = items.reduce((sum, row) => sum + row.value, 0);
+  if (!total) return <p className="analytics-help">Нет данных для распределения.</p>;
   return (
     <div className="donut-layout">
       <div className="donut-wrap">
@@ -111,7 +112,7 @@ export function CategoryBars({
             </div>
             <strong>
               {percent
-                ? `${Math.round((row.total / total) * 100)}%`
+                ? total ? `${Math.round((row.total / total) * 100)}%` : "Нет данных"
                 : row.total}
             </strong>
           </div>
@@ -123,19 +124,18 @@ export function CategoryBars({
   );
 }
 export function TrendChart({ data }: { data: AnalyticsDto["dailyTrend"] }) {
-  const id = useId().replaceAll(":", "");
   const [hidden, setHidden] = useState<string[]>([]);
   const series = [
-    { key: "created" as const, label: "Создано", color: "var(--chart-purple)" },
-    { key: "responded" as const, label: "Первый ответ", color: "var(--chart-orange)" },
-    { key: "completed" as const, label: "Завершено", color: "var(--chart-green)" },
+    { key: "created" as const, label: "Создано", color: "var(--home-plot)" },
+    { key: "responded" as const, label: "Первая реакция", color: "var(--home-error)" },
+    { key: "completed" as const, label: "Завершено", color: "var(--home-success)" },
   ];
-  const max = Math.max(
-    2,
+  const max = Math.ceil(Math.max(
+    4,
     ...data.flatMap((d) =>
       series.filter((s) => !hidden.includes(s.key)).map((s) => d[s.key]),
     ),
-  );
+  ) / 4) * 4;
   const points = (key: "created" | "responded" | "completed") =>
     data.map((d, i) => [
       44 + (i / Math.max(1, data.length - 1)) * 620,
@@ -146,6 +146,7 @@ export function TrendChart({ data }: { data: AnalyticsDto["dailyTrend"] }) {
       <div className="trend-legend">
         {series.map((s) => (
           <button
+            type="button"
             key={s.key}
             className={hidden.includes(s.key) ? "legend-disabled" : ""}
             aria-pressed={!hidden.includes(s.key)}
@@ -165,23 +166,8 @@ export function TrendChart({ data }: { data: AnalyticsDto["dailyTrend"] }) {
       <svg
         viewBox="0 0 700 208"
         role="img"
-        aria-label="Динамика обращений: создание, первый публичный ответ и завершение"
+        aria-label="Динамика выбранных обращений по интервалам: создание, первая реакция и завершение"
       >
-        <defs>
-          {series.map((s) => (
-            <linearGradient
-              key={s.key}
-              id={`${id}-${s.key}`}
-              x1="0"
-              y1="0"
-              x2="0"
-              y2="1"
-            >
-              <stop offset="0" stopColor={s.color} stopOpacity=".17" />
-              <stop offset="1" stopColor={s.color} stopOpacity="0" />
-            </linearGradient>
-          ))}
-        </defs>
         {[0, 1, 2, 3, 4].map((n) => (
           <g key={n}>
             <line
@@ -207,10 +193,6 @@ export function TrendChart({ data }: { data: AnalyticsDto["dailyTrend"] }) {
             return (
               <g key={s.key}>
                 <path
-                  d={`${path} L${p.at(-1)?.[0] ?? 44},168 L44,168Z`}
-                  fill={`url(#${id}-${s.key})`}
-                />
-                <path
                   d={path}
                   stroke={s.color}
                   strokeWidth="2.2"
@@ -220,7 +202,7 @@ export function TrendChart({ data }: { data: AnalyticsDto["dailyTrend"] }) {
                 {p.map(([x, y], i) => (
                   <circle key={i} cx={x} cy={y} r="2" fill={s.color}>
                     <title>
-                      {shortDate(data[i].date)} · {s.label}: {data[i][s.key]}
+                      Интервал от {shortDate(data[i].date)} · {s.label}: {data[i][s.key]}
                     </title>
                   </circle>
                 ))}

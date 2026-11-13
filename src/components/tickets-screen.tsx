@@ -77,7 +77,7 @@ export function TicketsScreen() {
   const currentSelection =
     resource.data?.items.filter((t) => selection.includes(t.id)) ?? [];
   return (
-    <>
+    <div className="tickets-page">
       <PageHeading
         title={title}
         description={
@@ -135,6 +135,7 @@ export function TicketsScreen() {
           />
         </div>
       )}
+      <section className="registry-filters" aria-label="Фильтры обращений">
       <div className="registry-toolbar">
         <label className="filter-control">
           <span>Статус</span>
@@ -264,7 +265,9 @@ export function TicketsScreen() {
           overdue ||
           params.get("q") ||
           params.get("status") ||
-          params.get("categoryId")) && (
+          params.get("categoryId") || params.get("departmentId") ||
+          params.get("assigneeId") || params.get("authorId") ||
+          params.get("type") || params.get("priority") || params.get("dueBefore") || archived) && (
           <button
             className="text-button"
             onClick={() => router.replace("/tickets")}
@@ -284,6 +287,12 @@ export function TicketsScreen() {
         </label>
         {actor.role !== "EMPLOYEE" && (
           <label className="checkbox">
+            <input type="checkbox" checked={unassigned} onChange={(e) => filter({ unassigned: e.target.checked ? "true" : "", assigneeId: "" })} />
+            Без ответственного
+          </label>
+        )}
+        {actor.role !== "EMPLOYEE" && (
+          <label className="checkbox">
             <input
               type="checkbox"
               checked={params.get("authorId") === actor.id}
@@ -295,6 +304,7 @@ export function TicketsScreen() {
           </label>
         )}
       </div>
+      </section>
       <ErrorNotice
         message={
           resource.error ||
@@ -303,7 +313,7 @@ export function TicketsScreen() {
           users.error ||
           summary.error
         }
-        retry={resource.refresh}
+        retry={() => { resource.refresh(); categories.refresh(); departments.refresh(); users.refresh(); summary.refresh(); }}
       />
       {currentSelection.length > 0 && (
         <div className="selection-toolbar">
@@ -373,7 +383,6 @@ export function TicketsScreen() {
             />
           )
         )}
-      </section>
       {resource.data && (
         <PaginationControls
           {...resource.data.pagination}
@@ -385,6 +394,7 @@ export function TicketsScreen() {
           onSize={(size) => filter({ pageSize: String(size) })}
         />
       )}
-    </>
+      </section>
+    </div>
   );
 }

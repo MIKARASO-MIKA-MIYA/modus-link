@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import type {
   TicketDto,
   TicketStatus,
@@ -42,6 +42,7 @@ export function TicketActionDialog({
   const [busy, setBusy] = useState(false);
   const [files, setFiles] = useState<File[]>([]);
   const [current, setCurrent] = useState(ticket);
+  const saving = useRef(false);
   const users = useResource<PageDto<UserSummary>>(
     kind === "assign" ? "users?pageSize=100" : null,
   );
@@ -66,13 +67,15 @@ export function TicketActionDialog({
         className="form-stack"
         onSubmit={async (e) => {
           e.preventDefault();
+          if (saving.current) return;
+          saving.current = true;
           setError(null);
           setBusy(true);
           const form = new FormData(e.currentTarget);
           try {
             let updated: TicketDto;
             if (kind === "upload") {
-              updated = current;
+              updated = current.version >= ticket.version ? current : ticket;
               for (const file of files) {
                 updated = (await uploadFile(updated, file)).ticket;
                 setCurrent(updated);
@@ -147,11 +150,13 @@ export function TicketActionDialog({
             )
               onConflict();
           } finally {
+            saving.current = false;
             setBusy(false);
           }
         }}
       >
-        <ErrorNotice message={error || users.error} />
+        <ErrorNotice message={error} />
+        <ErrorNotice message={users.error} retry={users.refresh} />
         {kind === "status" && (
           <>
             <label>
@@ -327,7 +332,7 @@ export function TicketActionDialog({
             className="button button-primary"
             disabled={
               busy ||
-              (kind === "assign" && users.loading) ||
+              (kind === "assign" && (users.loading || Boolean(users.error))) ||
               (kind === "upload" && !files.length)
             }
           >

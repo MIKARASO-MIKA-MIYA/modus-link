@@ -1,0 +1,48 @@
+/* Category administration only; other AdminDirectory screens stay unchanged. */
+.workspace-categories .categories-page { display: grid; gap: 16px; min-width: 0; }
+.workspace-categories .back-link { margin: 0; width: fit-content; font-size: 13px; }
+.workspace-categories .page-heading { margin: 0; gap: 16px; flex-wrap: wrap; }
+.workspace-categories .page-heading h1 { font-size: 30px; line-height: 1.15; }
+.workspace-categories .page-heading p { font-size: 14px; margin-bottom: 0; }
+.workspace-categories .button { min-height: 44px; padding: 11px 18px; border-radius: 30px; font-size: 14px; white-space: normal; text-align: center; }
+.workspace-categories .button-primary { box-shadow: none; }
+.workspace-categories .panel { padding: 16px; border-radius: 22px; border: 1px solid var(--home-line); background: var(--home-surface); box-shadow: 0 2px 6px var(--home-shadow); min-width: 0; margin: 0; }
+.workspace-categories .directory-panel { overflow: visible; }
+.workspace-categories .directory-table { min-width: 640px; font-size: 13px; }
+.workspace-categories .directory-table th { padding: 9px 10px; font-size: 12px; border-bottom: 0; color: var(--home-text); }
+.workspace-categories .directory-table th:first-child { border-radius: 11px 0 0 11px; }
+.workspace-categories .directory-table th:last-child { border-radius: 0 11px 11px 0; }
+.workspace-categories .directory-table td { padding: 11px 10px; border-bottom: 1px solid var(--home-line); }
+.workspace-categories .directory-table td:first-child { min-width: 170px; max-width: 280px; overflow-wrap: anywhere; }
+.workspace-categories .directory-table td:nth-child(2) { min-width: 240px; max-width: 600px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.workspace-categories .directory-status { border-radius: 20px; font-size: 12px; padding: 5px 9px; }
+.workspace-categories .directory-table .icon-button { width: 36px; height: 36px; border-radius: 10px; }
+.workspace-categories .sla-panel { gap: 14px; align-items: flex-start; }
+.workspace-categories .sla-panel h3 { font-size: 14px; margin-bottom: 6px; }
+.workspace-categories .sla-panel p { font-size: 14px; line-height: 1.5; }
+.workspace-categories .sla-panel small { font-size: 12px; line-height: 1.5; color: var(--home-muted); }
+.workspace-categories .sla-panel .heading-icon { width: 38px; height: 38px; border-radius: 12px; flex-shrink: 0; }
+.workspace-categories .events-pagination { margin: 0; gap: 12px; flex-wrap: wrap; font-size: 13px; }
+.workspace-categories .notice { margin: 0; font-size: 13px; overflow-wrap: anywhere; }
+.workspace-categories .empty-state,
+.workspace-categories .loading-state { min-height: 160px; }
+.workspace-categories .modal { padding: 22px; border-radius: 22px; background: var(--home-surface); color: var(--home-text); border: 1px solid var(--home-line); box-shadow: 0 8px 24px var(--shadow-dialog); }
+.workspace-categories .modal-heading h2 { font-size: 20px; overflow-wrap: anywhere; }
+.workspace-categories .modal .form-stack { gap: 16px; }
+.workspace-categories .modal label { font-size: 14px; min-width: 0; }
+.workspace-categories .modal input:not([type="checkbox"]),
+.workspace-categories .modal textarea { font-size: 14px; min-height: 44px; padding: 11px 12px; width: 100%; min-width: 0; border-radius: 12px; background: var(--home-surface); color: var(--home-text); }
+.workspace-categories .modal textarea { min-height: 110px; resize: vertical; line-height: 1.5; }
+.workspace-categories .modal input[type="checkbox"] { accent-color: var(--home-error); flex-shrink: 0; }
+.workspace-categories .modal [aria-invalid="true"] { border-color: var(--error); }
+.workspace-categories .field-error { font-size: 12px; font-weight: 400; line-height: 1.5; margin: 0; }
+.workspace-categories .category-help { font-size: 12px; line-height: 1.5; color: var(--home-muted); margin: 0; font-weight: 400; }
+.workspace-categories .modal .form-actions { gap: 10px; flex-wrap: wrap; }
+@media (max-width: 600px) {
+  .workspace-categories .page-heading h1 { font-size: 27px; }
+  .workspace-categories .panel { padding: 12px; border-radius: 20px; }
+  .workspace-categories .sla-panel { flex-wrap: wrap; }
+  .workspace-categories .modal { padding: 16px; }
+  .workspace-categories .modal input:not([type="checkbox"]),
+  .workspace-categories .modal textarea { font-size: 16px; }
+}

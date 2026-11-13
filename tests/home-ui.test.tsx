@@ -43,6 +43,14 @@ async function mountShell() {
 }
 
 describe("Homepage permissions and actions", () => {
+  it("reuses the shell for the registry with a single active link", async () => {
+    await act(async () => { root.render(<HomeShell pathname="/tickets" actor={actor} unread={0} logout={vi.fn()} logoutError={null}><div>Реестр</div></HomeShell>); });
+    expect(container.querySelectorAll(".home-sidebar")).toHaveLength(1);
+    expect(container.querySelectorAll(".home-topbar")).toHaveLength(1);
+    expect(container.querySelectorAll('[aria-current="page"]')).toHaveLength(1);
+    expect(container.querySelector('[aria-current="page"]')?.getAttribute("href")).toBe("/tickets");
+    expect(container.querySelector(".workspace-registry")).not.toBeNull();
+  });
   it.each(["EMPLOYEE", "MANAGER", "ADMIN"] satisfies Role[])("keeps role-specific navigation for %s", async (role) => {
     actor = { ...actor, role }; await mountShell();
     const menu = container.querySelector("nav")!;

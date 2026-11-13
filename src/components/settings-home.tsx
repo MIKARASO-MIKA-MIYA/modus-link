@@ -33,8 +33,8 @@ export function SettingsHome() {
         href: "/settings/routing",
       },
       {
-        title: "Настройки системы",
-        text: "Категории, сроки и параметры",
+        title: "Категории",
+        text: "Темы обращений и их активность",
         icon: "settings",
         href: "/settings/categories",
       },

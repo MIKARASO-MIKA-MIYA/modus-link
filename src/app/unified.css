@@ -1,0 +1,91 @@
+/* Remaining screens use the same shell and semantic tokens as Dashboard. */
+.workspace-content .home-main { display: flex; flex-direction: column; gap: 16px; }
+.workspace-content .page-heading { margin: 0; gap: 16px; flex-wrap: wrap; }
+.workspace-content .page-heading h1 { font-size: 30px; line-height: 1.15; }
+.workspace-content .page-heading p { font-size: 14px; margin-bottom: 0; }
+.workspace-content .panel { padding: 18px; border-radius: 22px; border: 1px solid var(--home-line); background: var(--home-surface); box-shadow: 0 2px 6px var(--home-shadow); min-width: 0; margin: 0; }
+.workspace-content .button { padding: 11px 18px; min-height: 44px; border-radius: 30px; font-size: 14px; white-space: normal; }
+.workspace-content .button-primary { box-shadow: none; }
+.workspace-content .profile-panel { width: 100%; max-width: 1000px; }
+.workspace-content .profile-cover { padding-bottom: 16px; gap: 16px; flex-wrap: wrap; }
+.workspace-content .profile-cover > div { min-width: 0; overflow-wrap: anywhere; }
+.workspace-content .profile-cover h2 { font-size: 22px; }
+.workspace-content .profile-avatar { background: var(--home-navy); color: var(--home-white); width: 64px; height: 64px; font-size: 24px; flex-shrink: 0; }
+.workspace-content .role-pill { display: inline-flex; background: var(--home-soft); color: var(--home-text); font-size: 13px; }
+.workspace-content .profile-fields { margin: 16px 0; }
+.workspace-content .profile-fields dt { font-size: 13px; }
+.workspace-content .profile-fields dd { font-size: 14px; overflow-wrap: anywhere; }
+.workspace-content .form-help { font-size: 12px; }
+.workspace-content .notification-row { padding: 14px 0; gap: 12px; }
+.workspace-content .notification-row > span:nth-child(2) { min-width: 0; overflow-wrap: anywhere; }
+.workspace-content .notification-row strong,
+.workspace-content .notification-row p { font-size: 14px; }
+.workspace-content .notification-row small { font-size: 12px; }
+.workspace-content .notification-icon { border-radius: 12px; background: var(--home-soft); color: var(--home-error); flex-shrink: 0; }
+.workspace-content .help-intro { flex-wrap: wrap; gap: 16px; }
+.workspace-content .help-intro h2 { font-size: 19px; }
+.workspace-content .help-intro p { font-size: 14px; }
+.workspace-content .faq-list { gap: 12px; max-width: none; }
+.workspace-content .faq-item summary { font-size: 14px; min-height: 32px; }
+.workspace-content .faq-item p { font-size: 14px; }
+.workspace-content .settings-cards { margin: 0; gap: 12px; }
+.workspace-content .settings-card { min-height: 96px; padding: 18px; gap: 16px; border-radius: 22px; background: var(--home-surface); box-shadow: 0 2px 6px var(--home-shadow); }
+.workspace-content .settings-card:hover { border-color: var(--home-muted); box-shadow: 0 2px 6px var(--home-shadow); }
+.workspace-content .settings-card-icon { width: 44px; height: 44px; border-radius: 14px; background: var(--home-soft); color: var(--home-error); }
+.workspace-content .settings-card-icon svg { width: 24px; height: 24px; }
+.workspace-content .settings-card > span:nth-child(2) { min-width: 0; overflow-wrap: anywhere; }
+.workspace-content .settings-card h2 { font-size: 17px; }
+.workspace-content .settings-card p { font-size: 13px; }
+.workspace-content .heading-icon { border-radius: 12px; background: var(--home-soft); color: var(--home-error); }
+.workspace-content .notice { margin: 0; }
+.workspace-content .empty-state { padding: 24px 14px; }
+.workspace-content .error-card { max-width: 800px; }
+.workspace-content .error-card h1 { font-size: 28px; }
+.workspace-content .error-card p { color: var(--home-muted); }
+.home-notifications[aria-current="page"],
+.home-support[aria-current="page"] { outline: 2px solid var(--home-red); outline-offset: 2px; }
+.home-profile-menu a[aria-current="page"] { color: var(--home-error); background: var(--home-soft); }
+.home-profile-trigger[aria-current="page"] { border-color: var(--home-red); }
+.app-loading { min-height: 100dvh; height: auto; gap: 18px; padding: 24px; background: var(--page); }
+.app-loading .brand { padding: 14px 18px; background: var(--sidebar); color: var(--nav-text); border-radius: 20px; }
+.app-loading .brand svg { width: 60px; height: 40px; }
+.login-page { min-height: 100dvh; padding: 72px 24px 32px; background: var(--page); overflow: visible; flex-direction: column; gap: 24px; }
+.login-layout { width: min(1000px, 100%); grid-template-columns: minmax(0, 1fr) minmax(0, 440px); gap: 32px; }
+.login-intro { background: var(--sidebar); border-radius: 28px; padding: 32px; color: var(--nav-text); }
+.login-intro .brand { color: var(--nav-text); font-size: 24px; }
+.login-intro .brand svg { width: 66px; height: 44px; flex-shrink: 0; }
+.login-intro h1 { color: var(--nav-text); font-size: 36px; margin: 28px 0 18px; }
+.login-intro > p,
+.login-intro .company-sign { color: var(--sidebar-muted); }
+.login-intro > p { font-size: 16px; }
+.login-intro .company-sign { margin-top: 32px; font-size: 12px; }
+.login-card { padding: 24px; border-radius: 24px; background: var(--surface); box-shadow: 0 2px 8px var(--shadow-color); backdrop-filter: none; }
+.login-card .button { border-radius: 30px; min-height: 44px; box-shadow: none; }
+.login-card input { border-radius: 12px; font-size: 14px; }
+.login-card .back-link { font-size: 13px; }
+.login-choice { border-radius: 14px; padding: 14px; }
+.login-choice:hover { transform: none; box-shadow: none; border-color: var(--accent); }
+.login-choice small,
+.login-footnote,
+.owner-entry,
+.registration-entry { font-size: 12px; }
+.login-bottom { position: static; width: min(1000px, 100%); font-size: 12px; }
+.login-tabs { border-radius: 12px; }
+.login-tabs button { font-size: 13px; }
+.login-tabs button.active { color: var(--accent); box-shadow: none; }
+.login-card .form-help-error { font-size: 12px; }
+@media (max-width: 700px) {
+  .workspace-content .page-heading h1 { font-size: 27px; }
+  .workspace-content .panel,
+  .workspace-content .settings-card { padding: 14px; border-radius: 20px; }
+  .workspace-content .profile-fields > div { grid-template-columns: minmax(0, 1fr); gap: 6px; }
+  .workspace-content .profile-fields dd { margin: 0; }
+  .workspace-content .profile-cover .role-pill { margin-left: 0; }
+  .workspace-content .help-intro .button { margin-left: 0; }
+  .login-layout { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  .login-intro { padding: 22px; }
+  .login-intro h1 { font-size: 28px; margin: 18px 0; }
+  .login-card { padding: 20px; }
+  .login-card input { font-size: 16px; }
+  .login-page { padding: 64px 12px 24px; }
+}

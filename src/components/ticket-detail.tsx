@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type {
   AttachmentDto,
   CommentDto,
@@ -80,6 +80,12 @@ export function TicketDetail({ id }: { id: string }) {
   const [comment, setComment] = useState("");
   const [internal, setInternal] = useState(false);
   const [resolution, setResolution] = useState("");
+  const submitting = useRef(false);
+  const tabs = ["comments", "history", "attachments"];
+  function activateTab(key: string) {
+    setTab(key);
+    document.getElementById(`ticket-tab-${key}`)?.focus();
+  }
   function updated(next: TicketDto) {
     setOverride(next);
     resource.refresh();
@@ -90,14 +96,15 @@ export function TicketDetail({ id }: { id: string }) {
   }
   if (!ticket)
     return (
-      <>
+      <div className="ticket-detail-page">
         <Link href="/tickets" className="back-link">
           <Icon name="back" size={18} />
           Вернуться к обращениям
         </Link>
         <ErrorNotice message={resource.error} retry={resource.refresh} />
         {resource.loading && <Loading />}
-      </>
+        {!resource.loading && !resource.error && <EmptyState title="Обращение недоступно" text="Вернитесь к списку обращений или повторите загрузку." action={<button type="button" className="text-button" onClick={resource.refresh}>Повторить загрузку</button>} />}
+      </div>
     );
   const handle = canHandle(actor, ticket);
   const open = !isCompleted(ticket.status) && !ticket.archivedAt;
@@ -135,7 +142,7 @@ export function TicketDetail({ id }: { id: string }) {
     isCompleted(s),
   );
   return (
-    <>
+    <div className="ticket-detail-page">
       <Link href="/tickets" className="back-link">
         <Icon name="back" size={19} />
         Вернуться к обращениям
@@ -178,11 +185,7 @@ export function TicketDetail({ id }: { id: string }) {
       )}
       <ErrorNotice
         message={
-          error ||
-          resource.error ||
-          comments.error ||
-          history.error ||
-          attachments.error
+          error || resource.error
         }
         retry={() => {
           resource.refresh();
@@ -194,6 +197,7 @@ export function TicketDetail({ id }: { id: string }) {
       <div className="ticket-detail-grid">
         <div className="ticket-main">
           <section className="panel progress-panel">
+            <p className="detail-resource-note">Текущий статус: {statusLabels[ticket.status]}. Даты промежуточных этапов — из загруженной страницы истории; «—» означает, что дата здесь недоступна.</p>
             <ol className="progress-stages">
               {stages.map((step, index) => (
                 <li
@@ -245,33 +249,41 @@ export function TicketDetail({ id }: { id: string }) {
               ].map((item) => (
                 <button
                   role="tab"
+                  type="button"
+                  tabIndex={tab === item.key ? 0 : -1}
                   aria-selected={tab === item.key}
                   aria-controls={`ticket-panel-${item.key}`}
                   id={`ticket-tab-${item.key}`}
                   key={item.key}
                   className={tab === item.key ? "active" : ""}
                   onClick={() => setTab(item.key)}
+                  onKeyDown={event => {
+                    const index = tabs.indexOf(item.key);
+                    const next = event.key === "ArrowRight" ? tabs[(index + 1) % tabs.length] : event.key === "ArrowLeft" ? tabs[(index + tabs.length - 1) % tabs.length] : event.key === "Home" ? tabs[0] : event.key === "End" ? tabs[tabs.length - 1] : null;
+                    if (next) { event.preventDefault(); activateTab(next); }
+                  }}
                 >
                   {item.label}
-                  <span>{item.count ?? 0}</span>
+                  <span>{item.count ?? "—"}</span>
                 </button>
               ))}
             </div>
             <div
               role="tabpanel"
+              tabIndex={0}
               id={`ticket-panel-${tab}`}
               aria-labelledby={`ticket-tab-${tab}`}
             >
               {tab === "comments" && (
                 <>
-                  {comments.loading && !comments.data ? (
+                  {comments.error ? <ErrorNotice message={comments.error} retry={comments.refresh} /> : comments.loading ? (
                     <Loading />
                   ) : comments.data?.items.length ? (
                     <div className="comments-list">
                       {comments.data.items.map((row) => (
                         <article className="comment-row" key={row.id}>
                           <span
-                            className={`avatar ${row.authorId === ticket.authorId ? "avatar-blue" : "avatar-purple"}`}
+                            className={`avatar ${row.authorId === ticket.authorId ? "avatar-blue" : "avatar-accent"}`}
                           >
                             {initials(row.author.name)}
                           </span>
@@ -290,12 +302,12 @@ export function TicketDetail({ id }: { id: string }) {
                         </article>
                       ))}
                     </div>
-                  ) : (
+                  ) : comments.data ? (
                     <EmptyState
                       title="Обсуждение ещё не началось"
                       text="Задайте вопрос или добавьте комментарий к обращению."
                     />
-                  )}
+                  ) : null}
                   {comments.data && comments.data.pagination.totalPages > 1 && (
                     <div className="events-pagination">
                       <button
@@ -323,6 +335,11 @@ export function TicketDetail({ id }: { id: string }) {
               )}
               {tab === "history" && (
                 <>
+                  <ErrorNotice message={history.error} retry={history.refresh} />
+                  {!history.error && history.loading && <Loading label="Загружаем историю…" />}
+                  {!history.error && !history.loading && history.data?.items.length === 0 && <EmptyState title="Событий пока нет" text="История изменений появится здесь." />}
+                  {!history.error && !history.loading && events.length > 0 && <p className="detail-resource-note">Страница {historyPage} из {history.data?.pagination.totalPages}. Всего доступных событий: {history.data?.pagination.total}.</p>}
+                  {!history.error && !history.loading &&
                   <ol className="history-timeline full-history">
                     {events.map((event) => (
                       <li key={event.id}>
@@ -354,6 +371,7 @@ export function TicketDetail({ id }: { id: string }) {
                       </li>
                     ))}
                   </ol>
+                  }
                   {history.data && history.data.pagination.totalPages > 1 && (
                     <div className="events-pagination">
                       <button
@@ -381,6 +399,9 @@ export function TicketDetail({ id }: { id: string }) {
               )}
               {tab === "attachments" && (
                 <>
+                  <ErrorNotice message={attachments.error} retry={attachments.refresh} />
+                  {!attachments.error && attachments.loading && <Loading label="Загружаем вложения…" />}
+                  {!attachments.error && !attachments.loading &&
                   <div className="attachment-list">
                     {attachments.data?.items.map((file) => (
                       <a
@@ -402,7 +423,8 @@ export function TicketDetail({ id }: { id: string }) {
                       </a>
                     ))}
                   </div>
-                  {!attachments.data?.items.length && (
+                  }
+                  {!attachments.error && !attachments.loading && attachments.data?.items.length === 0 && (
                     <EmptyState
                       title="Вложений пока нет"
                       text="Здесь будут документы и изображения к обращению."
@@ -429,6 +451,8 @@ export function TicketDetail({ id }: { id: string }) {
                 <form
                   onSubmit={async (e) => {
                     e.preventDefault();
+                    if (submitting.current || !comment.trim()) return;
+                    submitting.current = true;
                     setBusy(true);
                     setError(null);
                     try {
@@ -454,6 +478,7 @@ export function TicketDetail({ id }: { id: string }) {
                       )
                         resource.refresh();
                     } finally {
+                      submitting.current = false;
                       setBusy(false);
                     }
                   }}
@@ -564,6 +589,10 @@ export function TicketDetail({ id }: { id: string }) {
               )}
             </div>
             <div className="property-row">
+              <Icon name="layers" size={23} />
+              <div><h3>Приоритет</h3><span>{priorityLabels[ticket.priority]}</span>{ticket.department?.name && <small className="detail-department">Подразделение: {ticket.department.name}</small>}</div>
+            </div>
+            <div className="property-row">
               <Icon name="calendar" size={23} />
               <div>
                 <h3>Срок рассмотрения</h3>
@@ -611,6 +640,8 @@ export function TicketDetail({ id }: { id: string }) {
                 className="form-stack"
                 onSubmit={async (e) => {
                   e.preventDefault();
+                  if (submitting.current) return;
+                  submitting.current = true;
                   const form = new FormData(e.currentTarget);
                   setBusy(true);
                   setError(null);
@@ -631,6 +662,7 @@ export function TicketDetail({ id }: { id: string }) {
                     );
                     resource.refresh();
                   } finally {
+                    submitting.current = false;
                     setBusy(false);
                   }
                 }}
@@ -687,6 +719,11 @@ export function TicketDetail({ id }: { id: string }) {
               <Icon name="clock" size={22} />
               История изменений
             </h2>
+            <ErrorNotice message={history.error} retry={history.refresh} />
+            {!history.error && history.loading && <Loading label="Загружаем историю…" />}
+            {!history.error && !history.loading && history.data?.items.length === 0 && <p className="detail-resource-note">Событий пока нет.</p>}
+            {!history.error && !history.loading && history.data && <p className="detail-resource-note">До 4 событий со страницы {historyPage} из {history.data.pagination.totalPages}. Это фрагмент доступной истории.</p>}
+            {!history.error && !history.loading &&
             <ol className="history-timeline">
               {lastEvents.slice(0, 4).map((event, i) => (
                 <li key={event.id} className={i === 0 ? "latest-event" : ""}>
@@ -698,11 +735,12 @@ export function TicketDetail({ id }: { id: string }) {
                 </li>
               ))}
             </ol>
+            }
             <button
               className="text-button small"
-              onClick={() => setTab("history")}
+              onClick={() => activateTab("history")}
             >
-              Показать всю историю
+              Открыть историю
               <Icon name="arrow" size={15} />
             </button>
           </section>
@@ -728,6 +766,6 @@ export function TicketDetail({ id }: { id: string }) {
           onConflict={resource.refresh}
         />
       )}
-    </>
+    </div>
   );
 }

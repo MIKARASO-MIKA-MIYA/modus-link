@@ -7,6 +7,15 @@ import { themeInitScript } from "@/lib/theme";
 import "./theme.css";
 import "./globals.css";
 import "./home.css";
+import "./tickets.css";
+import "./create-ticket.css";
+import "./ticket-detail.css";
+import "./analytics.css";
+import "./team.css";
+import "./categories.css";
+import "./departments.css";
+import "./routing.css";
+import "./unified.css";
 export const metadata: Metadata = {
   title: {
     default: "MODUS LINK — обратная связь сотрудников",

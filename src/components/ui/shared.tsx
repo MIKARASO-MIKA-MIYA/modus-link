@@ -61,7 +61,7 @@ export function ErrorNotice({
       <Icon name="alert" size={19} />
       <span>{message}</span>
       {retry && (
-        <button className="text-button" onClick={retry}>
+        <button type="button" className="text-button" onClick={retry}>
           Повторить
         </button>
       )}
@@ -100,7 +100,7 @@ export function MetricCard({
   label,
   value,
   icon,
-  tone = "purple",
+  tone = "accent",
   href,
   note,
 }: {
