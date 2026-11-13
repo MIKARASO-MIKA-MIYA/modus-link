@@ -22,6 +22,12 @@
 
 <br>
 
+### [Открыть приложение →](https://modus-link.vercel.app/)
+
+[modus-link.vercel.app](https://modus-link.vercel.app/)
+
+<br>
+
 [Начало работы](#run)　·　[Возможности](#features)　·　[Архитектура](#architecture)　·　[Статус MVP](#status)
 
 [Документация](#docs)　·　[Описание API](docs/api.md)　·　[Проверки](#testing)
